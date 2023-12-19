@@ -25,6 +25,7 @@ spec:
       containers:
       - name: whoami
         image: r.deso.tech/whoami/whoami
+EOF
 )
 
 echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1

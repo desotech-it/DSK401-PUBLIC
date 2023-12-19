@@ -8,4 +8,4 @@ LABEL_KEY="scope"
 LABEL_VALUE="prd"
 
 # Aggiungi la label al nodo
-kubectl label nodes "$NODE_NAME" "$LABEL_KEY"="$LABEL_VALUE" > /dev/null
+kubectl label nodes "$NODE_NAME" "$LABEL_KEY"="$LABEL_VALUE" --overwrite &> /dev/null

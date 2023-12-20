@@ -15,7 +15,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: secret-reader-role
+  name: secret-reader
   namespace: project-hamster
 rules:
 - apiGroups: [""]
@@ -25,15 +25,15 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: secret-reader-binding
+  name: secret-reader
   namespace: project-hamster
 subjects:
 - kind: ServiceAccount
   name: secret-reader
   namespace: project-hamster
 roleRef:
-  kind: Role
-  name: secret-reader-role
+  kind: ClusterRole
+  name: secret-reader
   apiGroup: rbac.authorization.k8s.io
 EOF
 )

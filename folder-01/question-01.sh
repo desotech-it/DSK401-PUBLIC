@@ -1,23 +1,5 @@
 #!/bin/bash
 
-manifest_content=$(cat <<EOF
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: question-01
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: app-team1
-EOF
-)
-
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
-
-
-#!/bin/bash
-
 export location=/home/student/CKA-material
 export question=question-01
 export folder=folder-01
@@ -44,38 +26,3 @@ sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-01/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
-
-cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/burger-deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: burger-deployment
-  namespace: sandwich
-  labels:
-    app: burger
-    ns: sandwich
-    test: ckad
-    env: deso
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-    app: burger
-    ns: sandwich
-  template:
-    metadata:
-      labels:
-        app: burger
-        ns: sandwich
-        test: ckad
-        env: deso
-    spec:
-      containers:
-      - name: whoami
-        image: r.deso.tech/whoami/whoami:0.4.3
-        ports:
-        - containerPort: 80
-EOF
-
-
-kubectl apply -f $location/$folder/burger-deployment.yaml >> $LOGFILE 2>&1 

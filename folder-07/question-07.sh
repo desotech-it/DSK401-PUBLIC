@@ -27,19 +27,27 @@ kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
 
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/meet-up.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: question07
----
+  name: meet-up
+EOF
+
+kubectl apply -f $location/$folder/meet-up.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/meet-up.yaml >> $LOGFILE 2>&1 
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/presentation.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: presentation
-  namespace: question07
+  namespace: meet-up
+  labels:
+    qreplica: three
+    project: exposing
 spec:
-  replicas: 4
   selector:
     matchLabels:
       app: deployment-rs
@@ -48,11 +56,16 @@ spec:
       labels:
         app: deployment-rs
         environment: dev
+        replica: three
+        project: exposing
     spec:
       containers:
       - name: whoami
         image: r.deso.tech/whoami/whoami
+  replicas: 15
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+
+kubectl apply -f $location/$folder/presentation.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/presentation.yaml >> $LOGFILE 2>&1 

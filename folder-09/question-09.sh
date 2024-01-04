@@ -17,6 +17,10 @@ networking:
   serviceSubnet: "10.200.0.0/16"
 nodes:
 - role: control-plane
+- role: control-plane
+- role: control-plane
+- role: worker
+- role: worker
 - role: worker
 - role: worker
 EOF
@@ -26,3 +30,4 @@ sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-09/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
+

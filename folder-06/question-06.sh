@@ -27,18 +27,23 @@ kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
 
-
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/prod-milan-ns.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: question06
---- 
+  name: prod-milan
+EOF
+
+kubectl apply -f $location/$folder/prod-milan-ns.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/prod-milan-ns.yaml >> $LOGFILE 2>&1 
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/front-end.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: front-end
-  namespace: question06
+  namespace: prod-milan
 spec:
   replicas: 4
   selector:
@@ -54,6 +59,8 @@ spec:
       - name: nginx
         image: r.deso.tech/dockerhub/library/nginx
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+
+kubectl apply -f $location/$folder/front-end.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/front-end.yaml >> $LOGFILE 2>&1

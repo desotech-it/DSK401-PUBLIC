@@ -26,3 +26,5 @@ sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-04/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
+
+alias 'ssh'='docker exec -it '

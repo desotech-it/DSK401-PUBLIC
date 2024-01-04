@@ -19,6 +19,8 @@ nodes:
 - role: control-plane
 - role: worker
 - role: worker
+- role: worker
+- role: worker
 EOF
 
 
@@ -26,3 +28,34 @@ sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-02/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/burger-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: burger-deployment
+  namespace: question-01
+  labels:
+    app: burger
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: burger
+  template:
+    metadata:
+      labels:
+        app: burger
+    spec:
+      containers:
+      - name: whoami
+        image: r.deso.tech/whoami/whoami:0.4.3
+        ports:
+        - containerPort: 80
+EOF
+
+
+kubectl apply -f $location/$folder/burger-deployment.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/burger-deployment.yaml >> $LOGFILE 2>&1 

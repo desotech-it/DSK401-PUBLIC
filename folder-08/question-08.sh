@@ -27,12 +27,14 @@ kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
 kubectl create ns sandwich  >> $LOGFILE 2>&1
 
-# Nome del nodo
-NODE_NAME="worker01"
 
-# Label da aggiungere
-LABEL_KEY="scope"
-LABEL_VALUE="prod"
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/ingress-proxy.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-proxy
+EOF
 
-# Aggiungi la label al nodo
-kubectl label nodes "$NODE_NAME" "$LABEL_KEY"="$LABEL_VALUE" --overwrite &> /dev/null
+kubectl apply -f $location/$folder/ingress-proxy.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/ingress-proxy.yaml >> $LOGFILE 2>&1 

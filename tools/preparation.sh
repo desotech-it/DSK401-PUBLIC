@@ -6,12 +6,10 @@ mv DSK401-public CKA-material >> /dev/null 2>&1
 
 cd CKA-material >> /dev/null 2>&1 
 
-chmod +x tools/
-#chmod +x cleanup.sh
+chmod +x tools/*.sh
 
-#chmod +x metricserver-install.sh
 
-for q in {00..58} ; do chmod +x folder-"$q"/*.sh ; done >> /dev/null 2>&1 
+for q in {00..60} ; do chmod +x folder-"$q"/*.sh ; done >> /dev/null 2>&1 
 
 
 

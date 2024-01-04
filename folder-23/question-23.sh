@@ -28,12 +28,13 @@ kubectl config set-context --current --cluster $question --user kind-$question  
  
 
 
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/low-resource.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
   name: project-tiger
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+kubectl apply -f $location/$folder/low-resource.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/low-resource.yaml >> $LOGFILE 2>&1 

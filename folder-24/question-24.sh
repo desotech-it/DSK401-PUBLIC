@@ -26,3 +26,4 @@ sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-24/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
  
+./metricserver-install.sh >> $LOGFILE 2>&1

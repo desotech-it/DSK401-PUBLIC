@@ -18,7 +18,6 @@ networking:
 nodes:
 - role: control-plane
 - role: worker
-- role: worker
 EOF
 
 
@@ -26,3 +25,6 @@ sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-25/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
  
+
+alias ssh='function _run () { docker exec -it "$1" /bin/bash; }; _run'
+

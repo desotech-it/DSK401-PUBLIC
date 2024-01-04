@@ -6,7 +6,7 @@ export folder=folder-20
 export LOGFILE=$question.log
 touch $LOGFILE >> $LOGFILE 2>&1
 
-./cleanup.sh >> $LOGFILE 2>&1
+./tools/cleanup.sh  >> $LOGFILE 2>&1
 
 cat <<EOF | kind create cluster --image kindest/node:v1.29.0@sha256:eaa1450915475849a73a9227b8f201df25e55e268e5d619312131292e324d570  --config - > /dev/null 2>&1
 kind: Cluster
@@ -25,15 +25,19 @@ EOF
 sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-20/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
-kubectl create ns sandwich  >> $LOGFILE 2>&1
-
-
-manifest_content=$(cat <<EOF
+ 
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/meet-up.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
   name: web-app
----
+EOF
+
+kubectl apply -f $location/$folder/meet-up.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/meet-up.yaml >> $LOGFILE 2>&1 
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -46,7 +50,13 @@ spec:
   selector:
     app: nginx
   clusterIP: None
----
+EOF
+
+kubectl apply -f $location/$folder/svc.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/svc.yaml >> $LOGFILE 2>&1 
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/sts-up.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -80,8 +90,9 @@ spec:
           storage: 1Gi
       storageClassName: nfs-client
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+kubectl apply -f $location/$folder/sts-up.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/sts-up.yaml >> $LOGFILE 2>&1 
 
 kubectl wait --for=condition=Ready statefulset/web --timeout=60s -n web-app > /dev/null 2>&1

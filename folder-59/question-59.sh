@@ -1,8 +1,8 @@
 #!/bin/bash
 
 export location=/home/student/CKA-material
-export question=question-45
-export folder=folder-45
+export question=question-59
+export folder=folder-59
 export LOGFILE=$question.log
 touch $LOGFILE >> $LOGFILE 2>&1
 
@@ -22,6 +22,6 @@ nodes:
 EOF
 
 
-sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-45/' /home/student/.kube/config
+sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-59/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1

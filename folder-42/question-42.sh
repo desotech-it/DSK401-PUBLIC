@@ -6,7 +6,7 @@ export folder=folder-42
 export LOGFILE=$question.log
 touch $LOGFILE >> $LOGFILE 2>&1
 
-./cleanup.sh >> $LOGFILE 2>&1
+./tools/cleanup.sh  >> $LOGFILE 2>&1
 
 cat <<EOF | kind create cluster --image kindest/node:v1.29.0@sha256:eaa1450915475849a73a9227b8f201df25e55e268e5d619312131292e324d570  --config - > /dev/null 2>&1
 kind: Cluster
@@ -25,7 +25,7 @@ EOF
 sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-42/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
-kubectl create ns sandwich  >> $LOGFILE 2>&1
+ 
 
 
 manifest_content=$(cat <<EOF

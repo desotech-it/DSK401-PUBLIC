@@ -8,4 +8,6 @@ cd CKA-material >> /dev/null 2>&1
 
 chmod +x cleanup.sh
 
-for q in {00..44} ; do chmod +x folder-"$q"/*.sh ; done >> /dev/null 2>&1 
+for q in {00..58} ; do chmod +x folder-"$q"/*.sh ; done >> /dev/null 2>&1 
+for q in {00..58} ; do mkdir folder-"$q" ; done >> /dev/null 2>&1 
+for q in {00..58} ; do touch +x folder-"$q"/question-"$q".sh ; done >> /dev/null 2>&1 

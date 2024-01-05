@@ -25,15 +25,17 @@ EOF
 sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-42/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
- 
 
 
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/metals.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: project-hamster
+  name: metals
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+kubectl apply -f $location/$folder/metals.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/metals.yaml >> $LOGFILE 2>&1 
+
+alias ssh='function _run () { docker exec -it "$1" /bin/bash; }; _run' >> $LOGFILE 2>&1

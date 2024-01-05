@@ -25,14 +25,20 @@ EOF
 sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-43/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
- 
 
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/project-c13-ns.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
   name: project-c13
----
+EOF
+
+kubectl apply -f $location/$folder/project-c13-ns.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/project-c13-ns.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/deploy-01.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,7 +61,14 @@ spec:
           requests:
             cpu: "50m"
             memory: "20Mi"
----
+EOF
+
+kubectl apply -f $location/$folder/deploy-01.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/deploy-01.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/deploy-02.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -78,9 +91,14 @@ spec:
           requests:
             cpu: "50m"
             memory: "10Mi"
+EOF
 
----
+kubectl apply -f $location/$folder/deploy-02.yaml >> $LOGFILE 2>&1 
 
+rm -f $location/$folder/deploy-02.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/deploy-03.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -103,7 +121,14 @@ spec:
           requests:
             cpu: "30m"
             memory: "10Mi"
----
+EOF
+
+kubectl apply -f $location/$folder/deploy-03.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/deploy-03.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/deploy-04.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -122,7 +147,14 @@ spec:
       containers:
       - name: runner-heavy
         image: r.deso.tech/dockerhub/library/nginx
----
+EOF
+
+kubectl apply -f $location/$folder/deploy-04.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/deploy-04.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/deploy-05.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -145,7 +177,14 @@ spec:
           requests:
             cpu: "50m"
             memory: "10Mi"
----
+EOF
+
+kubectl apply -f $location/$folder/deploy-05.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/deploy-05.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/deploy-06.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -165,6 +204,7 @@ spec:
       - name: o3db-container
         image: r.deso.tech/dockerhub/library/nginx
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+kubectl apply -f $location/$folder/deploy-06.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/deploy-06.yaml >> $LOGFILE 2>&1 

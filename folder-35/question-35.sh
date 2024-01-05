@@ -18,30 +18,14 @@ networking:
 nodes:
 - role: control-plane
 - role: worker
-- role: worker
 EOF
 
 
 sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-35/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
- 
 
+docker exec $question-worker systemctl stop kubelet >> $LOGFILE 2>&1
+sleep 20  >> $LOGFILE 2>&1
 
-# Specifica le variabili per l'accesso SSH
-SSH_HOST="worker01"
-
-# Esegui comandi remoti tramite SSH
-ssh $SSH_HOST << EOF
-  # Backup della configurazione originale
-  sudo cp /etc/systemd/system/kubelet.service.d/10-kubeadm.conf /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.bak
-
-  # Modifica del percorso del binario di kubelet
-  sudo sed -i 's@/usr/bin/kubelet@/path/to/nonexistent/kubelet@g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-
-  # Ricarica la configurazione del servizio
-  sudo systemctl daemon-reload
-
-  # Riavvia kubelet
-  sudo systemctl restart kubelet
-EOF
+alias ssh='function _run () { docker exec -it "$1" /bin/bash; }; _run' >> $LOGFILE 2>&1

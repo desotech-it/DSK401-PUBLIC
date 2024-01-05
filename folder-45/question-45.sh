@@ -22,6 +22,10 @@ nodes:
 EOF
 
 
-sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-45/' /home/student/.kube/config
+sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-60/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
+
+docker exec $question-control-plane bash -c "apt-get update -y && apt-get install -y vim" >> $LOGFILE 2>&1
+
+alias ssh='function _run () { docker exec -it "$1" /bin/bash; }; _run' >> $LOGFILE 2>&1

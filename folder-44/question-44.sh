@@ -25,45 +25,66 @@ EOF
 sed -i '/^\s*name:/s/\(name:\s*\).*/\1question-44/' /home/student/.kube/config
 kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
- 
 
 
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/pets.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: project-hamster
----
+  name: pets
+EOF
+
+kubectl apply -f $location/$folder/pets.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/pets.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/hamster.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: secret-reader
-  namespace: project-hamster
----
+  name: hamster
+  namespace: pets
+EOF
+
+kubectl apply -f $location/$folder/hamster.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/hamster.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/hamster-cluterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: secret-reader
-  namespace: project-hamster
+  name: hamster
+  namespace: pets
 rules:
 - apiGroups: [""]
   resources: ["secrets"]
   verbs: ["get", "list"]
----
+EOF
+
+kubectl apply -f $location/$folder/hamster-cluterrole.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/hamster-cluterrole.yaml >> $LOGFILE 2>&1 
+
+
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/hamster-rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: secret-reader
-  namespace: project-hamster
+  name: hamster
+  namespace: pets
 subjects:
 - kind: ServiceAccount
-  name: secret-reader
-  namespace: project-hamster
+  name: hamster
+  namespace: pets
 roleRef:
   kind: ClusterRole
-  name: secret-reader
+  name: hamster
   apiGroup: rbac.authorization.k8s.io
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+kubectl apply -f $location/$folder/hamster-rolebinding.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/hamster-rolebinding.yaml >> $LOGFILE 2>&1 

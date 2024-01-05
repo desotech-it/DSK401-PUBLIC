@@ -27,13 +27,13 @@ kubectl config use-context $question  >> $LOGFILE 2>&1
 kubectl config set-context --current --cluster $question --user kind-$question  >> $LOGFILE 2>&1
  
 
-
-manifest_content=$(cat <<EOF
+cat >> $LOGFILE 2>&1  <<EOF >>$location/$folder/ns.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: project-tiger
+  name: project-horse
 EOF
-)
 
-echo "$manifest_content" | kubectl apply -f - > /dev/null 2>&1
+kubectl apply -f $location/$folder/ns.yaml >> $LOGFILE 2>&1 
+
+rm -f $location/$folder/ns.yaml >> $LOGFILE 2>&1 
